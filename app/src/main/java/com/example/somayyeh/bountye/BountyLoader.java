@@ -8,8 +8,10 @@ import org.json.JSONException;
 import java.io.IOException;
 import java.util.List;
 
-class BountyLoader extends AsyncTaskLoader<List<BountyeSpec>>{
+class BountyLoader extends AsyncTaskLoader<List<BountyeSpec>> {
+
     String mUrl;
+
     @Override
     protected void onStartLoading() {
         forceLoad();

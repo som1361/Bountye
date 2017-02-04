@@ -18,7 +18,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // identify ViewPager used in xml file
-        mViewPager = (ViewPager)findViewById(R.id.pager);
+        mViewPager = (ViewPager) findViewById(R.id.pager);
 
         //create an instance of ViewPagerAdapter class
         categoriesPagerAdapter = new DiscoverCategoriesPagerAdapter(getSupportFragmentManager(), this);

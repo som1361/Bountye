@@ -18,41 +18,37 @@ import android.widget.TextView;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * A simple {@link Fragment} subclass.
- */
- public class everyThingFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<BountyeSpec>>{
+
+public class everyThingFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<BountyeSpec>> {
 
     private BountyeAdapter bountyeAdapter;
     private View rootView;
 
     public final String BOUNTYE_URL = "http://dev.api.bountye.com/api/user/feed?offset=0&count=20";
+
     public everyThingFragment() {
-        // Required empty public constructor
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        rootView = inflater.inflate(R.layout.everything_list,container,false);
+        rootView = inflater.inflate(R.layout.everything_list, container, false);
 
-        bountyeAdapter = new BountyeAdapter(getActivity(),new ArrayList<BountyeSpec>());
+        bountyeAdapter = new BountyeAdapter(getActivity(), new ArrayList<BountyeSpec>());
         GridView list = (GridView) rootView.findViewById(R.id.gridview);
         list.setAdapter(bountyeAdapter);
 
         //check network connectivity
         ConnectivityManager myCon = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = myCon.getActiveNetworkInfo();
-        if(netInfo != null && netInfo.isConnected()) {
+        if (netInfo != null && netInfo.isConnected()) {
 
             LoaderManager loaderManager = getActivity().getLoaderManager();
             loaderManager.initLoader(0, null, this);
 
 
-        }
-        else
-        {
+        } else {
             ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
             progressBar.setVisibility(View.GONE);
             TextView emptyState = (TextView) rootView.findViewById(R.id.emptyList);
@@ -65,26 +61,23 @@ import java.util.List;
 
     @Override
     public Loader<List<BountyeSpec>> onCreateLoader(int id, Bundle args) {
-        return new BountyLoader(getContext(),BOUNTYE_URL);
+        return new BountyLoader(getContext(), BOUNTYE_URL);
     }
 
     @Override
-    public void onLoadFinished(Loader<List<BountyeSpec>> loader, List<BountyeSpec> data)
-    {
+    public void onLoadFinished(Loader<List<BountyeSpec>> loader, List<BountyeSpec> data) {
         bountyeAdapter.clear();
-        if (data != null && !data.isEmpty())
-        {
+        if (data != null && !data.isEmpty()) {
             bountyeAdapter.addAll(data);
         }
-      ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
+        ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
 
     }
 
     @Override
-    public void onLoaderReset(Loader<List<BountyeSpec>> loader)
-    {
-      bountyeAdapter.clear();
+    public void onLoaderReset(Loader<List<BountyeSpec>> loader) {
+        bountyeAdapter.clear();
 
     }
 }

@@ -4,27 +4,24 @@ import android.graphics.Bitmap;
 
 import java.io.Serializable;
 
-/**
- * Created by somayyeh on 7/31/16.
- */
-public class BountyeSpec implements Serializable
-{
-    private String mSellerName;
-    private Bitmap mSellerImage;
 
-    public BountyeSpec(String sellerName, Bitmap sellerImage)
-    {
-      mSellerImage = sellerImage;
+public class BountyeSpec implements Serializable {
+
+    private String mSellerName;
+    private Bitmap mItemImage;
+
+    public BountyeSpec(String sellerName, Bitmap itemImage) {
+        mItemImage = itemImage;
         mSellerName = sellerName;
     }
-    public String getSellerName()
-    {
+
+    public String getSellerName() {
         return mSellerName;
 
     }
-    public Bitmap getmSellerImage()
-    {
-        return mSellerImage;
+
+    public Bitmap getItemImage() {
+        return mItemImage;
     }
 
 }

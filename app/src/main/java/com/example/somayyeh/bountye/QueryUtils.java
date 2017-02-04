@@ -20,9 +20,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 
-public class QueryUtils
-{
+public class QueryUtils {
     public static final String LOG_TAG = QueryUtils.class.getSimpleName();
+
     public static List<BountyeSpec> fetchBountyeData(String url) throws JSONException, IOException {
         List<BountyeSpec> bountyeList = null;
         try {
@@ -32,13 +32,14 @@ public class QueryUtils
         } catch (MalformedURLException e) {
             e.printStackTrace();
         }
-return bountyeList;
+        return bountyeList;
 
     }
 
     public static URL createUrl(String url) throws MalformedURLException {
-       return new URL(url);
-     }
+        return new URL(url);
+    }
+
     public static String makeHttpRequest(URL url) throws IOException {
         String jsonResponse = "";
 
@@ -51,8 +52,6 @@ return bountyeList;
         InputStream inputStream = null;
         try {
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setReadTimeout(10000 /* milliseconds */);
-            urlConnection.setConnectTimeout(15000 /* milliseconds */);
             urlConnection.setRequestMethod("GET");
             urlConnection.connect();
 
@@ -76,6 +75,7 @@ return bountyeList;
         }
         return jsonResponse;
     }
+
     public static String readFromInputStream(InputStream inputStream) throws IOException {
         StringBuilder output = new StringBuilder();
         String result = "";
@@ -89,9 +89,10 @@ return bountyeList;
             }
         }
         result = output.toString();
-        Log.v(LOG_TAG,"response is: "+result);
+        Log.v(LOG_TAG, "response is: " + result);
         return result;
     }
+
     public static List<BountyeSpec> extractBountyeData(String jsonResponse) throws JSONException, IOException {
         List<BountyeSpec> bountyesList = new ArrayList<BountyeSpec>();
         String sellerName = "";
@@ -100,8 +101,7 @@ return bountyeList;
 
         JSONArray root = new JSONArray(jsonResponse);
         int i;
-        for (i=0 ; i< root.length();i++)
-        {
+        for (i = 0; i < root.length(); i++) {
             JSONObject items = root.getJSONObject(i);
             JSONObject seller = items.getJSONObject("seller");
             sellerName = seller.getString("firstName");
@@ -112,12 +112,11 @@ return bountyeList;
                 String imageUrl = photoElements.getString("imageUrl");
                 URL url = createUrl(imageUrl);
                 bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            }
-            else bmp=null;
-            BountyeSpec bountyeItem = new BountyeSpec(sellerName , bmp);
+            } else bmp = null;
+            BountyeSpec bountyeItem = new BountyeSpec(sellerName, bmp);
             bountyesList.add(bountyeItem);
         }
-        Log.v(LOG_TAG,"bountyesList size is: "+ i);
+        Log.v(LOG_TAG, "bountyesList size is: " + i);
 
         return bountyesList;
 
