@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Bountye</string>
+    <string name="title_activity_initial">initialActivity</string>
+    <string name="home_garden_fragment">Home, Gardening</string>
+    <string name="everything_fragment">Everything</string>
+    <string name="charities_fragment">Charities</string>
+    <string name="kids_fragment">Kids</string>
+    <string name="books_movies_fragment">Books, Movies</string>
+    <string name="collectables_fragment">Collectable</string>
+    <string name="electronics_fragment">Electronics</string>
+    <string name="women_fragment">Women</string>
+    <string name="men_fragment">Men</string>
+    <string name="motors_fragment">Motors</string>
+    <string name="sporting_goods_fragment">Sporting Goods</string>
+    <string name="other_fragment">Other</string>
+    <string name="tickets_fragment">Tickets</string>
+    <string name="no_network_data">No network found.</string>
+    <string name="empty_data">No bountye found.</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+
+
+</resources>
