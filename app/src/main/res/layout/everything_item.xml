@@ -3,7 +3,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="vertical"
     android:layout_width="match_parent"
-    android:background="?android:attr/selectableItemBackground"
+    android:background="@android:color/white"
     android:layout_height="match_parent">
     <com.example.somayyeh.bountye.SquareImageView
         android:id="@+id/itemImage"
@@ -17,11 +17,69 @@
         android:layout_height="wrap_content"
         android:paddingLeft="10dp"
         android:paddingRight="10dp"
-        android:paddingTop="15dp"
-        android:paddingBottom="15dp"
         android:layout_gravity="bottom"
-        android:textColor="@android:color/white"
-        android:background="#55000000"
+        android:textColor="@android:color/black"
+        android:background="#00000000"
         android:textStyle="bold"
         />
+    <TextView
+        android:id="@+id/itemPrice"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="10dp"
+        android:paddingRight="10dp"
+        android:layout_gravity="bottom"
+        android:textColor="@android:color/holo_blue_light"
+        android:background="#00000000"
+        android:textStyle="bold"
+        />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="?android:attr/listPreferredItemHeight"
+        android:orientation="horizontal"
+        android:paddingEnd="16dp"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp"
+        >
+
+        <ImageView
+            android:id="@+id/sellerPhoto"
+            android:layout_width="36dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="center"
+ />
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_weight="1"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/seller_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:fontFamily="sans-serif-medium"
+                android:maxLines="2"
+                android:textAllCaps="true"
+                android:textColor="@color/textColorSellerName"
+                android:textSize="12sp"
+                 />
+
+            <TextView
+                android:fontFamily="sans-serif-medium"
+                android:id="@+id/seller_location"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textColor="@color/textColorSellerLocation"
+></TextView>
+        </LinearLayout>
 </LinearLayout>
+    </LinearLayout>

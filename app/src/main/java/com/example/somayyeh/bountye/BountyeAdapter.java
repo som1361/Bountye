@@ -29,7 +29,16 @@ public class BountyeAdapter extends ArrayAdapter<BountyeSpec> {
         ImageView itemImage = (ImageView) gridItemView.findViewById(R.id.itemImage);
         itemImage.setImageBitmap(currentItem.getItemImage());
         TextView itemName = (TextView) gridItemView.findViewById(R.id.itemName);
-        itemName.setText("" + currentItem.getSellerName());
+        itemName.setText("" + currentItem.getTitle());
+        TextView price= (TextView) gridItemView.findViewById(R.id.itemPrice);
+        price.setText("" + currentItem.getPrice());
+        ImageView sellerImage = (ImageView) gridItemView.findViewById(R.id.sellerPhoto);
+        sellerImage.setImageBitmap(currentItem.getSellerPhoto());
+        TextView sellerName = (TextView) gridItemView.findViewById(R.id.seller_name);
+        sellerName.setText("" + currentItem.getSellerName());
+        TextView sellerLocation = (TextView) gridItemView.findViewById(R.id.seller_location);
+        sellerLocation.setText("" + currentItem.getPickupLocation());
+
 
         return gridItemView;
 

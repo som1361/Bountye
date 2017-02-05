@@ -97,14 +97,26 @@ public class QueryUtils {
         List<BountyeSpec> bountyesList = new ArrayList<BountyeSpec>();
         String sellerName = "";
         Bitmap bmp = null;
-
+        String title = "";
+        Bitmap photo = null;
 
         JSONArray root = new JSONArray(jsonResponse);
         int i;
         for (i = 0; i < root.length(); i++) {
+
             JSONObject items = root.getJSONObject(i);
+
+            title = items.getString("title");
+
             JSONObject seller = items.getJSONObject("seller");
             sellerName = seller.getString("firstName");
+
+            String photoUrl = seller.getString("photo");
+            if (photoUrl != null) {
+                URL url = createUrl(photoUrl);
+                photo = BitmapFactory.decodeStream(url.openConnection().getInputStream());
+            }
+            else photo = null;
 
             JSONArray photos = items.getJSONArray("photos");
             JSONObject photoElements = photos.optJSONObject(0);
@@ -113,10 +125,16 @@ public class QueryUtils {
                 URL url = createUrl(imageUrl);
                 bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
             } else bmp = null;
-            BountyeSpec bountyeItem = new BountyeSpec(sellerName, bmp);
+
+            JSONObject pickupLocation = items.getJSONObject("pickupLocation");
+            String location = pickupLocation.getString("suburb") + ", " + pickupLocation.getString("state");
+
+            String price = items.getString("price");
+
+
+            BountyeSpec bountyeItem = new BountyeSpec(sellerName, bmp, title, price, photo, location);
             bountyesList.add(bountyeItem);
         }
-        Log.v(LOG_TAG, "bountyesList size is: " + i);
 
         return bountyesList;
 

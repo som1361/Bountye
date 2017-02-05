@@ -4,4 +4,6 @@
     <color name="colorPrimaryDark">#aef4efda</color>
     <color name="colorAccent">#FF4081</color>
     <color name="colorInitial">#a6a3a3</color>
+    <color name="textColorSellerName">#2B3D4D</color>
+    <color name="textColorSellerLocation">#a6a3a3</color>
 </resources>
