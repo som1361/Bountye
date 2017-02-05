@@ -19,31 +19,31 @@ public class DiscoverCategoriesPagerAdapter extends FragmentPagerAdapter {
     public Fragment getItem(int position) {
         switch (position) {
             case 0:
-                return new everyThingFragment();
+                return new noDataFragment();
             case 1:
                 return new everyThingFragment();
             case 2:
-                return new everyThingFragment();
+                return new noDataFragment();
             case 3:
-                return new everyThingFragment();
+                return new noDataFragment();
             case 4:
-                return new everyThingFragment();
+                return new noDataFragment();
             case 5:
-                return new everyThingFragment();
+                return new noDataFragment();
             case 6:
-                return new everyThingFragment();
+                return new noDataFragment();
             case 7:
-                return new everyThingFragment();
+                return new noDataFragment();
             case 8:
-                return new everyThingFragment();
+                return new noDataFragment();
             case 9:
-                return new everyThingFragment();
+                return new noDataFragment();
             case 10:
-                return new everyThingFragment();
+                return new noDataFragment();
             case 11:
-                return new everyThingFragment();
+                return new noDataFragment();
             case 12:
-                return new everyThingFragment();
+                return new noDataFragment();
             default:
                 return null;
         }
