@@ -8,13 +8,13 @@ import java.io.Serializable;
 public class BountyeSpec implements Serializable {
 
     private String mSellerName;
-    private Bitmap mItemImage;
+    private String mItemImage;
     private String mTitle;
     private String mPrice;
-    private Bitmap mSellerPhoto;
+    private String mSellerPhoto;
     private String mPickupLocation;
 
-    public BountyeSpec(String sellerName, Bitmap itemImage, String title, String price, Bitmap sellerPhoto, String pickupLocation) {
+    public BountyeSpec(String sellerName, String itemImage, String title, String price, String sellerPhoto, String pickupLocation) {
         mItemImage = itemImage;
         mSellerName = sellerName;
         mTitle = title;
@@ -28,7 +28,7 @@ public class BountyeSpec implements Serializable {
 
     }
 
-    public Bitmap getItemImage() {
+    public String getItemImage() {
         return mItemImage;
     }
 
@@ -43,7 +43,7 @@ public class BountyeSpec implements Serializable {
 
     }
 
-    public Bitmap getSellerPhoto() {
+    public String getSellerPhoto() {
         return mSellerPhoto;
 
     }

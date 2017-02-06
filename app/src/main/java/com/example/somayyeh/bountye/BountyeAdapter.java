@@ -8,6 +8,8 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+
 import java.util.ArrayList;
 
 
@@ -27,13 +29,20 @@ public class BountyeAdapter extends ArrayAdapter<BountyeSpec> {
 
         BountyeSpec currentItem = getItem(position);
         ImageView itemImage = (ImageView) gridItemView.findViewById(R.id.itemImage);
-        itemImage.setImageBitmap(currentItem.getItemImage());
+        Glide.with(getContext())
+                .load(currentItem.getItemImage())
+                .into(itemImage);
+
+       // itemImage.setImageBitmap(currentItem.getItemImage());
         TextView itemName = (TextView) gridItemView.findViewById(R.id.itemName);
         itemName.setText("" + currentItem.getTitle());
         TextView price= (TextView) gridItemView.findViewById(R.id.itemPrice);
         price.setText("" + currentItem.getPrice());
         ImageView sellerImage = (ImageView) gridItemView.findViewById(R.id.sellerPhoto);
-        sellerImage.setImageBitmap(currentItem.getSellerPhoto());
+        Glide.with(getContext())
+                .load(currentItem.getSellerPhoto())
+                .into(sellerImage);
+       // sellerImage.setImageBitmap(currentItem.getSellerPhoto());
         TextView sellerName = (TextView) gridItemView.findViewById(R.id.seller_name);
         sellerName.setText("" + currentItem.getSellerName());
         TextView sellerLocation = (TextView) gridItemView.findViewById(R.id.seller_location);

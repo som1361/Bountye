@@ -1,5 +1,6 @@
 package com.example.somayyeh.bountye;
 
+import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.util.Log;
@@ -111,20 +112,14 @@ public class QueryUtils {
             JSONObject seller = items.getJSONObject("seller");
             sellerName = seller.getString("firstName");
 
-            String photoUrl = seller.getString("photo");
-            if (photoUrl != null) {
-                URL url = createUrl(photoUrl);
-                photo = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            }
-            else photo = null;
+            String sellerImage = seller.getString("photo");
 
             JSONArray photos = items.getJSONArray("photos");
             JSONObject photoElements = photos.optJSONObject(0);
+            String itemImage =null;
             if (photoElements != null) {
-                String imageUrl = photoElements.getString("imageUrl");
-                URL url = createUrl(imageUrl);
-                bmp = BitmapFactory.decodeStream(url.openConnection().getInputStream());
-            } else bmp = null;
+                itemImage = photoElements.getString("imageUrl");
+            }
 
             JSONObject pickupLocation = items.getJSONObject("pickupLocation");
             String location = pickupLocation.getString("suburb") + ", " + pickupLocation.getString("state");
@@ -132,11 +127,12 @@ public class QueryUtils {
             String price = items.getString("price");
 
 
-            BountyeSpec bountyeItem = new BountyeSpec(sellerName, bmp, title, price, photo, location);
+            BountyeSpec bountyeItem = new BountyeSpec(sellerName, itemImage, title, price, sellerImage, location);
             bountyesList.add(bountyeItem);
         }
 
         return bountyesList;
 
     }
+
 }
