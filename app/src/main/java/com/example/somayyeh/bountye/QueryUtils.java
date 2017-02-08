@@ -61,6 +61,7 @@ public class QueryUtils {
             if (urlConnection.getResponseCode() == 200) {
                 inputStream = urlConnection.getInputStream();
                 jsonResponse = readFromInputStream(inputStream);
+              //  urlConnection.disconnect();
             } else {
                 Log.e(LOG_TAG, "Error response code: " + urlConnection.getResponseCode());
             }
@@ -100,6 +101,8 @@ public class QueryUtils {
         Bitmap bmp = null;
         String title = "";
         Bitmap photo = null;
+
+        Log.v(LOG_TAG,jsonResponse);
 
         JSONArray root = new JSONArray(jsonResponse);
         int i;

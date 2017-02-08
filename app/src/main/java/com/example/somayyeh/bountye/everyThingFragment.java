@@ -8,9 +8,11 @@ import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AbsListView;
 import android.widget.GridView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -21,10 +23,16 @@ import java.util.List;
 
 public class everyThingFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<BountyeSpec>> {
 
+private static final int DEFAULT_THRESHOLD = 20;
+    private boolean firstLoad = true;
     private BountyeAdapter bountyeAdapter;
     private View rootView;
+    private int loaderId = 0;
+    private int offset=0;
+    LoaderManager loaderManager;
 
-    public final String BOUNTYE_URL = "http://dev.api.bountye.com/api/user/feed?offset=0&count=20";
+    public String bountyeUrl;
+    public static final String LOG_TAG = QueryUtils.class.getSimpleName();
 
     public everyThingFragment() {
     }
@@ -34,18 +42,33 @@ public class everyThingFragment extends Fragment implements LoaderManager.Loader
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.everything_list, container, false);
-
         bountyeAdapter = new BountyeAdapter(getActivity(), new ArrayList<BountyeSpec>());
         GridView list = (GridView) rootView.findViewById(R.id.gridview);
         list.setAdapter(bountyeAdapter);
+
+        list.setOnScrollListener(new AbsListView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(AbsListView view, int scrollState) {
+
+            }
+
+            @Override
+            public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
+
+                if (bountyeAdapter.getCount() > 0 && firstVisibleItem + visibleItemCount >= totalItemCount) {
+                    loadMore();
+                }
+            }
+
+        });
 
         //check network connectivity
         ConnectivityManager myCon = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = myCon.getActiveNetworkInfo();
         if (netInfo != null && netInfo.isConnected()) {
 
-            LoaderManager loaderManager = getActivity().getLoaderManager();
-            loaderManager.initLoader(0, null, this);
+            loaderManager = getActivity().getLoaderManager();
+            loaderManager.initLoader(loaderId, null, this);
 
 
         } else {
@@ -57,11 +80,23 @@ public class everyThingFragment extends Fragment implements LoaderManager.Loader
 
         return rootView;
 
+
     }
+
+    public void loadMore()
+
+{
+    if (bountyeAdapter.getCount() > 0) {
+        bountyeAdapter.clear();
+        loaderManager.restartLoader(0, null, this);
+    }
+}
+
 
     @Override
     public Loader<List<BountyeSpec>> onCreateLoader(int id, Bundle args) {
-        return new BountyLoader(getContext(), BOUNTYE_URL);
+        createUrl();
+        return new BountyLoader(getContext(), bountyeUrl);
     }
 
     @Override
@@ -80,4 +115,16 @@ public class everyThingFragment extends Fragment implements LoaderManager.Loader
         bountyeAdapter.clear();
 
     }
+public void createUrl()
+{
+    if (firstLoad)
+
+        firstLoad=false;
+
+    else
+    offset += DEFAULT_THRESHOLD;
+
+    bountyeUrl= "http://dev.api.bountye.com/api/user/feed?offset="+offset+"&count=20";
+}
+
 }

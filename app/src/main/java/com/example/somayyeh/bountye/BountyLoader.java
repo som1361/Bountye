@@ -10,7 +10,7 @@ import java.util.List;
 
 class BountyLoader extends AsyncTaskLoader<List<BountyeSpec>> {
 
-    String mUrl;
+    private String mUrl;
 
     @Override
     protected void onStartLoading() {
@@ -27,6 +27,7 @@ class BountyLoader extends AsyncTaskLoader<List<BountyeSpec>> {
         if (mUrl == null)
             return null;
         try {
+
             return QueryUtils.fetchBountyeData( mUrl);
         } catch (JSONException e) {
             e.printStackTrace();
@@ -35,4 +36,5 @@ class BountyLoader extends AsyncTaskLoader<List<BountyeSpec>> {
         }
         return null;
     }
+
 }
