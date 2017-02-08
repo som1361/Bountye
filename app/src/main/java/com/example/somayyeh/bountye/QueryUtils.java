@@ -90,6 +90,7 @@ public class QueryUtils {
                 line = reader.readLine();
             }
         }
+
         result = output.toString();
         Log.v(LOG_TAG, "response is: " + result);
         return result;

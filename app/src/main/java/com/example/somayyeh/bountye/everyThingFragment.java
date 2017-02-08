@@ -23,13 +23,14 @@ import java.util.List;
 
 public class everyThingFragment extends Fragment implements LoaderManager.LoaderCallbacks<List<BountyeSpec>> {
 
-private static final int DEFAULT_THRESHOLD = 20;
+    private static final int DEFAULT_THRESHOLD = 20;
     private boolean firstLoad = true;
     private BountyeAdapter bountyeAdapter;
     private View rootView;
-    private int loaderId = 0;
+    private boolean isLoading = false;
     private int offset=0;
     LoaderManager loaderManager;
+    private List<BountyeSpec> bufferedData;
 
     public String bountyeUrl;
     public static final String LOG_TAG = QueryUtils.class.getSimpleName();
@@ -55,7 +56,7 @@ private static final int DEFAULT_THRESHOLD = 20;
             @Override
             public void onScroll(AbsListView view, int firstVisibleItem, int visibleItemCount, int totalItemCount) {
 
-                if (bountyeAdapter.getCount() > 0 && firstVisibleItem + visibleItemCount >= totalItemCount) {
+                if ( isLoading && bufferedData.size()>0 && firstVisibleItem + visibleItemCount >= bountyeAdapter.getCount()) {
                     loadMore();
                 }
             }
@@ -68,7 +69,11 @@ private static final int DEFAULT_THRESHOLD = 20;
         if (netInfo != null && netInfo.isConnected()) {
 
             loaderManager = getActivity().getLoaderManager();
-            loaderManager.initLoader(loaderId, null, this);
+            if (firstLoad)
+            {
+                loaderManager.initLoader(0, null, this);
+            }
+            loaderManager.initLoader(1, null, this);
 
 
         } else {
@@ -85,12 +90,14 @@ private static final int DEFAULT_THRESHOLD = 20;
 
     public void loadMore()
 
-{
-    if (bountyeAdapter.getCount() > 0) {
-        bountyeAdapter.clear();
-        loaderManager.restartLoader(0, null, this);
+    {
+
+           // bountyeAdapter.clear();
+
+            bountyeAdapter.addAll(bufferedData);
+            loaderManager.restartLoader(1, null, this);
+
     }
-}
 
 
     @Override
@@ -100,11 +107,32 @@ private static final int DEFAULT_THRESHOLD = 20;
     }
 
     @Override
-    public void onLoadFinished(Loader<List<BountyeSpec>> loader, List<BountyeSpec> data) {
-        bountyeAdapter.clear();
-        if (data != null && !data.isEmpty()) {
-            bountyeAdapter.addAll(data);
+    public void onLoadFinished(Loader<List<BountyeSpec>> loader, List<BountyeSpec> data)
+    {
+        switch (loader.getId())
+        {
+            case 0:
+                if (data != null && !data.isEmpty()) {
+                    bountyeAdapter.addAll(data);
+                    getActivity().getLoaderManager().destroyLoader(0);
+                }
+                break;
+            case 1:
+                if (data != null && !data.isEmpty()) {
+                    bufferedData = new ArrayList<BountyeSpec>(data);
+                    isLoading = true;
+                }
+                else
+                {
+                    isLoading=false;
+                }
+
+                break;
+            default:
+
+
         }
+
         ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.progressBar);
         progressBar.setVisibility(View.GONE);
 
@@ -115,16 +143,16 @@ private static final int DEFAULT_THRESHOLD = 20;
         bountyeAdapter.clear();
 
     }
-public void createUrl()
-{
-    if (firstLoad)
+    public void createUrl()
+    {
+        if (firstLoad)
 
-        firstLoad=false;
+            firstLoad=false;
 
-    else
-    offset += DEFAULT_THRESHOLD;
+        else
+            offset += DEFAULT_THRESHOLD;
 
-    bountyeUrl= "http://dev.api.bountye.com/api/user/feed?offset="+offset+"&count=20";
-}
+        bountyeUrl= "http://dev.api.bountye.com/api/user/feed?offset="+offset+"&count=20";
+    }
 
 }
