@@ -17,6 +17,7 @@ import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -42,11 +43,13 @@ import java.util.List;
 
 public class SellItemFragment extends Fragment {
 
-    private static final int GALLERY_IMAGE = 1;
-    private static final int CAMERA_IMAGE = 2;
     static final int REQUEST_IMAGE_CAPTURE = 1;
-    private ImageView imageView;
+    private ImageView currentImageView;
+    private ImageView photo1, photo2, photo3, photo4,photo5 ;
+    ImageView[] IMGS = { photo1, photo2, photo3,photo4, photo5 };
+    private int[] myImgViews = {R.id.ImageView1,R.id.ImageView2,R.id.ImageView3,R.id.ImageView4,R.id.ImageView5};
     String Url = "http://dev.api.bountye.com/api/user/avatar";
+    Bitmap bitmap=null;
 
     private View rootView;
 
@@ -60,31 +63,42 @@ public class SellItemFragment extends Fragment {
 
         rootView = inflater.inflate(R.layout.fragment_sell_item, container, false);
 
-        imageView = (ImageView) rootView.findViewById(R.id.ImageView);
-        Button uploadBtn = (Button) rootView.findViewById(R.id.imguploadbtn);
+        for(int i = 0; i < 5; i++) {
+            IMGS[i]=(ImageView)rootView.findViewById(myImgViews[i]);
+            IMGS[i].setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                   currentImageView = (ImageView)v;
+                    selectPhoto();
+                    try {
+                        uploadImage();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+                }
+            });
 
-        uploadBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                selectPhoto();
-            }
-        });
-
+        }
 
         return rootView;
 
-
     }
+
+
 
     public void selectPhoto() {
 
-        Intent takePictureIntent = new Intent("android.media.action.IMAGE_CAPTURE" );
+       Intent takePictureIntent = new Intent("android.media.action.IMAGE_CAPTURE" );
         File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
             startActivityForResult(takePictureIntent, REQUEST_IMAGE_CAPTURE);
+
         }
+
     }
 
     @Override
@@ -100,33 +114,26 @@ public class SellItemFragment extends Fragment {
                     }
                 }
 
-                Bitmap bitmap;
+
                 BitmapFactory.Options bitmapOptions = new BitmapFactory.Options();
 
                 bitmap = BitmapFactory.decodeFile(f.getAbsolutePath(),
                         bitmapOptions);
 
-                imageView.setImageBitmap(bitmap);
+                currentImageView.setImageBitmap(bitmap);
 
             }
 
-            try {
-                uploadImage();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
+
         }
     }
-        public void uploadImage() throws IOException, JSONException
+
+    public void uploadImage() throws IOException, JSONException
         {
 
        PostUtils.fetchUploadData(Url);
 
-
     }
-
 
     }
 

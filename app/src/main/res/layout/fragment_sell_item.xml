@@ -1,25 +1,63 @@
-<?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="fill_parent"
-    android:background="#FFFFFF"
-    android:orientation="vertical"
-    >
-
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:layout_height="match_parent">
     <com.example.somayyeh.bountye.SquareImageView
-        android:id="@+id/ImageView"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_centerInParent="true"
-        android:layout_marginTop="16dp"
-        android:src="@drawable/bountye"
+        android:id="@+id/ImageView1"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/camera1"
+        android:layout_margin="5dp"
         />
-            <Button
-                android:layout_width="wrap_content"
-                android:id="@+id/imguploadbtn"
-                android:layout_height="wrap_content"
-                android:layout_margin="16dp"
-                android:layout_gravity="center_horizontal"
-                android:text="Upload" />
+    <TableLayout
+        android:layout_width="0dp"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent">
+        <TableRow>
+    <com.example.somayyeh.bountye.SquareImageView
+        android:id="@+id/ImageView2"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_margin="3dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/camera1"
+        />
+            <com.example.somayyeh.bountye.SquareImageView
+                android:id="@+id/ImageView3"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:layout_margin="3dp"
+                android:src="@drawable/camera1"
+                />
 
+        </TableRow>
+        <TableRow>
+            <com.example.somayyeh.bountye.SquareImageView
+                android:id="@+id/ImageView4"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:layout_margin="3dp"
+                android:src="@drawable/camera1"
+                />
+            <com.example.somayyeh.bountye.SquareImageView
+                android:id="@+id/ImageView5"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="3dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/camera1"
+                />
+
+        </TableRow>
+</TableLayout>
 </LinearLayout>
