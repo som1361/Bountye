@@ -26,11 +26,16 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import org.json.JSONException;
+
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -41,6 +46,7 @@ public class SellItemFragment extends Fragment {
     private static final int CAMERA_IMAGE = 2;
     static final int REQUEST_IMAGE_CAPTURE = 1;
     private ImageView imageView;
+    String Url = "http://dev.api.bountye.com/api/user/avatar";
 
     private View rootView;
 
@@ -72,7 +78,7 @@ public class SellItemFragment extends Fragment {
 
     public void selectPhoto() {
 
-        Intent takePictureIntent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        Intent takePictureIntent = new Intent("android.media.action.IMAGE_CAPTURE" );
         File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 
@@ -101,7 +107,26 @@ public class SellItemFragment extends Fragment {
                         bitmapOptions);
 
                 imageView.setImageBitmap(bitmap);
+
+            }
+
+            try {
+                uploadImage();
+            } catch (IOException e) {
+                e.printStackTrace();
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
         }
     }
-}
+        public void uploadImage() throws IOException, JSONException
+        {
+
+       PostUtils.fetchUploadData(Url);
+
+
+    }
+
+
+    }
+
