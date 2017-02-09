@@ -14,6 +14,7 @@
     <string name="sporting_goods_fragment">Sporting Goods</string>
     <string name="other_fragment">Other</string>
     <string name="tickets_fragment">Tickets</string>
+    <string name="sell_item_fragment">Sell Item</string>
     <string name="no_network_data">No network found.</string>
     <string name="empty_data">No bountye found.</string>
 
