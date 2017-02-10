@@ -2,6 +2,7 @@ package com.example.somayyeh.bountye;
 
 import android.app.Activity;
 import android.app.LoaderManager;
+import android.app.ProgressDialog;
 import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
@@ -12,11 +13,13 @@ import android.graphics.BitmapFactory;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.provider.MediaStore;
 import android.support.v4.app.Fragment;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +29,7 @@ import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONException;
 
@@ -48,7 +52,6 @@ public class SellItemFragment extends Fragment {
     private ImageView photo1, photo2, photo3, photo4,photo5 ;
     ImageView[] IMGS = { photo1, photo2, photo3,photo4, photo5 };
     private int[] myImgViews = {R.id.ImageView1,R.id.ImageView2,R.id.ImageView3,R.id.ImageView4,R.id.ImageView5};
-    String Url = "http://dev.api.bountye.com/api/user/avatar";
     Bitmap bitmap=null;
 
     private View rootView;
@@ -70,13 +73,8 @@ public class SellItemFragment extends Fragment {
                 public void onClick(View v) {
                    currentImageView = (ImageView)v;
                     selectPhoto();
-                    try {
-                        uploadImage();
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    } catch (JSONException e) {
-                        e.printStackTrace();
-                    }
+
+
                 }
             });
 
@@ -121,6 +119,11 @@ public class SellItemFragment extends Fragment {
                         bitmapOptions);
 
                 currentImageView.setImageBitmap(bitmap);
+                    new PostUtils(getContext()).execute(bitmap);
+                   // String result = PostUtils.fetchUploadeData(Url, bitmap);
+                   // String result = "You are uploading the photo";
+                  //  Toast.makeText(getActivity(),result,Toast.LENGTH_SHORT).show();
+
 
             }
 
@@ -128,12 +131,6 @@ public class SellItemFragment extends Fragment {
         }
     }
 
-    public void uploadImage() throws IOException, JSONException
-        {
-
-       PostUtils.fetchUploadData(Url);
-
-    }
 
     }
 
