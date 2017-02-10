@@ -65,7 +65,8 @@ public class SellItemFragment extends Fragment {
                              Bundle savedInstanceState) {
 
         rootView = inflater.inflate(R.layout.fragment_sell_item, container, false);
-
+        ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.sellProgressBar);
+        progressBar.setVisibility(View.GONE);
         for(int i = 0; i < 5; i++) {
             IMGS[i]=(ImageView)rootView.findViewById(myImgViews[i]);
             IMGS[i].setOnClickListener(new View.OnClickListener() {
@@ -89,7 +90,7 @@ public class SellItemFragment extends Fragment {
     public void selectPhoto() {
 
        Intent takePictureIntent = new Intent("android.media.action.IMAGE_CAPTURE" );
-        File f = new File(android.os.Environment.getExternalStorageDirectory(), "temp.jpg");
+        File f = new File(android.os.Environment.getExternalStorageDirectory(), "user_photo.jpg");
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -106,7 +107,7 @@ public class SellItemFragment extends Fragment {
             if (requestCode == 1) {
                 File f = new File(Environment.getExternalStorageDirectory().toString());
                 for (File temp : f.listFiles()) {
-                    if (temp.getName().equals("temp.jpg")) {
+                    if (temp.getName().equals("user_photo.jpg")) {
                         f = temp;
                         break;
                     }
@@ -119,8 +120,10 @@ public class SellItemFragment extends Fragment {
                         bitmapOptions);
 
                 currentImageView.setImageBitmap(bitmap);
-                    new PostUtils(getContext()).execute(bitmap);
-                   // String result = PostUtils.fetchUploadeData(Url, bitmap);
+                ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.sellProgressBar);
+                progressBar.setVisibility(View.VISIBLE);
+                    new PostUtils(getActivity()).execute(bitmap);
+                // String result = PostUtils.fetchUploadeData(Url, bitmap);
                    // String result = "You are uploading the photo";
                   //  Toast.makeText(getActivity(),result,Toast.LENGTH_SHORT).show();
 

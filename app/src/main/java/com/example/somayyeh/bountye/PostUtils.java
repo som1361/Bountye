@@ -3,8 +3,11 @@ package com.example.somayyeh.bountye;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.support.v4.app.FragmentActivity;
 import android.util.Base64;
 import android.util.Log;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -32,11 +35,11 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
     private static final String LOG_TAG = PostUtils.class.getSimpleName();
     private static final String UPLOAD_URL = "http://dev.api.bountye.com/api/user/avatar";
     private static URL url;
-    private static Context context;
+    private static  FragmentActivity activity;
     private static String JsonResponse;
 
-    public PostUtils(Context c) {
-        context = c;
+    public PostUtils(FragmentActivity a) {
+        activity = a;
     }
 
     @Override
@@ -69,32 +72,34 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
     }
 
     @Override
-    protected void onPostExecute(String s) {
-        super.onPostExecute(s);
-       Toast.makeText(context, s , Toast.LENGTH_LONG).show();
-
+    protected void onPostExecute(String result) {
+        super.onPostExecute(result);
+         if (result==null)
+         {
+             result="Upload failed.";
+         }
+       Toast.makeText(activity, result , Toast.LENGTH_LONG).show();
+        ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.sellProgressBar);
+        progressBar.setVisibility(View.GONE);
     }
 
     public static void makeHttpRequest(Bitmap bitmap) throws IOException
     {
         //Static stuff
-        String attachmentName = "user_photo";
-        String attachmentFileName = "user_photo.png";
-
-
+        String attachmentName = "temp";
+        String attachmentFileName = "user_photo";
 
         //set up request
         HttpURLConnection connection = null;
         URL url = new URL(UPLOAD_URL);
         connection = (HttpURLConnection) url.openConnection();
+        //it includes a request body
         connection.setDoOutput(true);
         connection.setUseCaches(false);
         connection.setRequestMethod("POST");
         connection.setRequestProperty("Connection", "Keep-Alive");
         connection.setRequestProperty("Cache-Control", "no-cache");
-        connection.setRequestProperty(
-                "Content-Type", "multipart/form-data");
-        connection.setRequestProperty("","");
+        connection.setRequestProperty("Content-Type", "multipart/form-data");
 
         //convert Bitmap to PNG
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
@@ -102,7 +107,6 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
         byte[] byteArray = byteArrayOutputStream .toByteArray();
        // String image = Base64.encodeToString(byteArray, Base64.DEFAULT);
 
-      //  OutputStream outputStream = connection.getOutputStream();
         DataOutputStream outputStream = new DataOutputStream(
                 connection.getOutputStream());
 
@@ -125,7 +129,8 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
         String line = "";
         StringBuilder stringBuilder = new StringBuilder();
 
-        while ((line = responseStreamReader.readLine()) != null) {
+        while ((line = responseStreamReader.readLine()) != null)
+        {
             stringBuilder.append(line).append("\n");
         }
         responseStreamReader.close();
@@ -134,7 +139,7 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
        // System.out.println("json response is:" + JsonResponse);
         //Toast.makeText(context, JsonResponse , Toast.LENGTH_LONG).show();
 
-        //Close response stream:
+        //Close response stream
 
         responseStream.close();
         connection.disconnect();
