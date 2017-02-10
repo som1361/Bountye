@@ -90,7 +90,7 @@ public class SellItemFragment extends Fragment {
     public void selectPhoto() {
 
        Intent takePictureIntent = new Intent("android.media.action.IMAGE_CAPTURE" );
-        File f = new File(android.os.Environment.getExternalStorageDirectory(), "user_photo.jpg");
+        File f = new File(android.os.Environment.getExternalStorageDirectory(), "user_photo");
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -107,7 +107,7 @@ public class SellItemFragment extends Fragment {
             if (requestCode == 1) {
                 File f = new File(Environment.getExternalStorageDirectory().toString());
                 for (File temp : f.listFiles()) {
-                    if (temp.getName().equals("user_photo.jpg")) {
+                    if (temp.getName().equals("user_photo")) {
                         f = temp;
                         break;
                     }

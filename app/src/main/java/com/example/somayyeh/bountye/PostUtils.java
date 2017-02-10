@@ -86,7 +86,7 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
     public static void makeHttpRequest(Bitmap bitmap) throws IOException
     {
         //Static stuff
-        String attachmentName = "temp";
+      //  String attachmentName = "temp";
         String attachmentFileName = "user_photo";
 
         //set up request
@@ -112,7 +112,6 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
 
 
         outputStream.writeBytes("Content-Disposition: form-data; name=\"" +
-                attachmentName + "\";filename=\"" +
                 attachmentFileName + "\"");
         outputStream.write(byteArray);
 
