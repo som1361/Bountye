@@ -3,6 +3,7 @@ package com.example.somayyeh.bountye;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.os.AsyncTask;
+import android.os.Environment;
 import android.support.v4.app.FragmentActivity;
 import android.util.Base64;
 import android.util.Log;
@@ -18,6 +19,9 @@ import java.io.BufferedInputStream;
 import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -57,7 +61,7 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
         }
         try {
 
-            makeHttpRequest(params[0]);
+           return makeHttpRequest(params[0]);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -74,77 +78,85 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
     @Override
     protected void onPostExecute(String result) {
         super.onPostExecute(result);
-         if (result==null)
+        Log.v(LOG_TAG, "Json response is: " + result);
+
+        if (result==null)
          {
              result="Upload failed.";
          }
-       Toast.makeText(activity, result , Toast.LENGTH_LONG).show();
+
+        Toast.makeText(activity, result , Toast.LENGTH_LONG).show();
         ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.sellProgressBar);
         progressBar.setVisibility(View.GONE);
     }
 
-    public static void makeHttpRequest(Bitmap bitmap) throws IOException
-    {
-        //Static stuff
-      //  String attachmentName = "temp";
-        String attachmentFileName = "user_photo";
+    public static String makeHttpRequest(Bitmap bitmap) throws IOException {
 
-        //set up request
+        String twoHyphens = "--";
+        String boundary =  "*****";
+        String lineEnd = "\r\n";
+
+        String filePath = Environment.getExternalStorageDirectory()  +"/"+ "user_photo";
+        String fileName = null;
+        File sourceFile = new File(filePath);
+
+        if (!sourceFile.isFile()) {
+
+            Log.e("uploadFile", "Source File not exist :" + fileName);
+            return "Source File not exist";
+        }
+
+            //set up request
         HttpURLConnection connection = null;
         URL url = new URL(UPLOAD_URL);
-        connection = (HttpURLConnection) url.openConnection();
-        //it includes a request body
-        connection.setDoOutput(true);
-        connection.setUseCaches(false);
-        connection.setRequestMethod("POST");
-        connection.setRequestProperty("Connection", "Keep-Alive");
-        connection.setRequestProperty("Cache-Control", "no-cache");
-        connection.setRequestProperty("Content-Type", "multipart/form-data");
+        InputStream inputStream = null;
 
-        //convert Bitmap to PNG
-        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG, 100, byteArrayOutputStream);
-        byte[] byteArray = byteArrayOutputStream .toByteArray();
-       // String image = Base64.encodeToString(byteArray, Base64.DEFAULT);
+        try {
+            connection = (HttpURLConnection) url.openConnection();
+            connection.setDoOutput(true);
+            connection.setUseCaches(false);
+            connection.setRequestMethod("POST");
+            connection.setRequestProperty("Connection", "Keep-Alive");
+            connection.setRequestProperty("Cache-Control", "no-cache");
+            connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
+            connection.setRequestProperty("uploaded_file", fileName);
 
-        DataOutputStream outputStream = new DataOutputStream(
-                connection.getOutputStream());
+            DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
+            dos.writeBytes(lineEnd + twoHyphens + boundary + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"userfile\"; filename=\"" + fileName + "\"" + lineEnd);
+            dos.writeBytes("Content-Type: application/octet-stream" + lineEnd);
+            dos.writeBytes(lineEnd);
+            bitmap.compress(Bitmap.CompressFormat.PNG, 100, dos);
+            dos.writeBytes(lineEnd);
+            dos.writeBytes(twoHyphens + boundary + twoHyphens + lineEnd);
+            dos.flush();
+            dos.close();
 
+            inputStream = connection.getInputStream();
+            StringBuilder output = new StringBuilder();
+            if (inputStream != null) {
+                InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
+                BufferedReader reader = new BufferedReader(inputStreamReader);
+                String line = reader.readLine();
+                while (line != null) {
+                    output.append(line);
+                    line = reader.readLine();
+                }
+            }
+            JsonResponse = output.toString();
 
-        outputStream.writeBytes("Content-Disposition: form-data; name=\"" +
-                attachmentFileName + "\"");
-        outputStream.write(byteArray);
-
-        outputStream.flush();
-        outputStream.close();
-
-       // Get response
-        InputStream responseStream = new
-                BufferedInputStream(connection.getInputStream());
-
-        BufferedReader responseStreamReader =
-                new BufferedReader(new InputStreamReader(responseStream));
-
-        String line = "";
-        StringBuilder stringBuilder = new StringBuilder();
-
-        while ((line = responseStreamReader.readLine()) != null)
-        {
-            stringBuilder.append(line).append("\n");
+        } catch (IOException e) {
+            Log.e(LOG_TAG, "Problem retrieving the bountye JSON results.", e);
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
+            }
+            if (inputStream != null) {
+                inputStream.close();
+            }
         }
-        responseStreamReader.close();
-
-        JsonResponse = stringBuilder.toString();
-       // System.out.println("json response is:" + JsonResponse);
-        //Toast.makeText(context, JsonResponse , Toast.LENGTH_LONG).show();
-
-        //Close response stream
-
-        responseStream.close();
-        connection.disconnect();
-
+        return JsonResponse;
     }
-
 
     public static String extractUploadData() throws JSONException, IOException
     {

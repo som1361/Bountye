@@ -90,7 +90,7 @@ public class SellItemFragment extends Fragment {
     public void selectPhoto() {
 
        Intent takePictureIntent = new Intent("android.media.action.IMAGE_CAPTURE" );
-        File f = new File(android.os.Environment.getExternalStorageDirectory(), "user_photo");
+        File f = new File(Environment.getExternalStorageDirectory(), "user_photo");
         takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, Uri.fromFile(f));
 
         if (takePictureIntent.resolveActivity(getActivity().getPackageManager()) != null) {
@@ -120,6 +120,8 @@ public class SellItemFragment extends Fragment {
                         bitmapOptions);
 
                 currentImageView.setImageBitmap(bitmap);
+
+
                 ProgressBar progressBar = (ProgressBar) rootView.findViewById(R.id.sellProgressBar);
                 progressBar.setVisibility(View.VISIBLE);
                     new PostUtils(getActivity()).execute(bitmap);
