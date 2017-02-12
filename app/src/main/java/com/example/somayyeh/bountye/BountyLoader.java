@@ -27,7 +27,7 @@ class BountyLoader extends AsyncTaskLoader<List<BountyeSpec>> {
         if (mUrl == null)
             return null;
         try {
-            return QueryUtils.fetchBountyeData( mUrl);
+           return QueryUtils.fetchBountyeData( mUrl);
         } catch (JSONException e) {
             e.printStackTrace();
         } catch (IOException e) {

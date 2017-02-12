@@ -23,7 +23,7 @@ public class DiscoverCategoriesPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return new everyThingFragment();
             case 2:
-                return new noDataFragment();
+                return new SellItemFragment();
             case 3:
                 return new noDataFragment();
             case 4:
@@ -57,7 +57,7 @@ public class DiscoverCategoriesPagerAdapter extends FragmentPagerAdapter {
             case 1:
                 return mContext.getResources().getString(R.string.everything_fragment);
             case 2:
-                return mContext.getResources().getString(R.string.charities_fragment);
+                return mContext.getResources().getString(R.string.sell_item_fragment);
             case 3:
                 return mContext.getResources().getString(R.string.kids_fragment);
             case 4:

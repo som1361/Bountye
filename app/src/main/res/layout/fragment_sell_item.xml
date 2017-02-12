@@ -1,0 +1,76 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:background="@color/colorPrimaryDark"
+    android:layout_height="match_parent">
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <com.example.somayyeh.bountye.SquareImageView
+        android:id="@+id/ImageView1"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/camera1"
+        android:layout_margin="5dp"
+        />
+    <TableLayout
+        android:layout_width="0dp"
+        android:layout_margin="5dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent">
+        <TableRow>
+    <com.example.somayyeh.bountye.SquareImageView
+        android:id="@+id/ImageView2"
+        android:layout_width="0dp"
+        android:layout_weight="1"
+        android:layout_height="match_parent"
+        android:layout_margin="3dp"
+        android:scaleType="centerCrop"
+        android:src="@drawable/camera1"
+        />
+            <com.example.somayyeh.bountye.SquareImageView
+                android:id="@+id/ImageView3"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:layout_margin="3dp"
+                android:src="@drawable/camera1"
+                />
+
+        </TableRow>
+        <TableRow>
+            <com.example.somayyeh.bountye.SquareImageView
+                android:id="@+id/ImageView4"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:layout_margin="3dp"
+                android:src="@drawable/camera1"
+                />
+            <com.example.somayyeh.bountye.SquareImageView
+                android:id="@+id/ImageView5"
+                android:layout_width="0dp"
+                android:layout_weight="1"
+                android:layout_margin="3dp"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/camera1"
+                />
+
+        </TableRow>
+</TableLayout>
+    </LinearLayout>
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:id="@+id/sellProgressBar"
+        android:layout_gravity = "center_vertical|center_horizontal"
+        android:layout_centerInParent="true"/>
+
+</LinearLayout>
