@@ -40,7 +40,7 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
     private static final String UPLOAD_URL = "http://dev.api.bountye.com/api/user/avatar";
     private static URL url;
     private static  FragmentActivity activity;
-    private static String JsonResponse;
+
 
     public PostUtils(FragmentActivity a) {
         activity = a;
@@ -54,6 +54,7 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
     @Override
     protected String doInBackground(Bitmap... params)
     {
+        String jsonResponse;
         try {
            url = new URL(UPLOAD_URL);
         } catch (MalformedURLException e) {
@@ -61,17 +62,18 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
         }
         try {
 
-           return makeHttpRequest(params[0]);
+            jsonResponse = makeHttpRequest(params[0]);
+            if (!jsonResponse.isEmpty())
+            {
+                return extractUploadData(jsonResponse);
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
-        }
-        /* try {
-            return extractUploadData();
         } catch (JSONException e) {
             e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }*/
+        }
+
         return null;
     }
 
@@ -84,6 +86,10 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
          {
              result="Upload failed.";
          }
+        else
+        {
+            result += " was uploaded successfully.";
+        }
 
         Toast.makeText(activity, result , Toast.LENGTH_LONG).show();
         ProgressBar progressBar = (ProgressBar) activity.findViewById(R.id.sellProgressBar);
@@ -97,12 +103,13 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
         String lineEnd = "\r\n";
 
         String filePath = Environment.getExternalStorageDirectory()  +"/"+ "user_photo";
-        String fileName = null;
+        String attachmentName = "user_photo";
+        String attachmentFileName = "user_photo.png";
         File sourceFile = new File(filePath);
 
         if (!sourceFile.isFile()) {
 
-            Log.e("uploadFile", "Source File not exist :" + fileName);
+            Log.e("uploadFile", "Source File not exist :" + attachmentFileName);
             return "Source File not exist";
         }
 
@@ -110,6 +117,7 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
         HttpURLConnection connection = null;
         URL url = new URL(UPLOAD_URL);
         InputStream inputStream = null;
+        String response = null;
 
         try {
             connection = (HttpURLConnection) url.openConnection();
@@ -119,11 +127,13 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
             connection.setRequestProperty("Connection", "Keep-Alive");
             connection.setRequestProperty("Cache-Control", "no-cache");
             connection.setRequestProperty("Content-Type", "multipart/form-data;boundary=" + boundary);
-            connection.setRequestProperty("uploaded_file", fileName);
+            connection.setRequestProperty("uploaded_file", attachmentFileName);
 
             DataOutputStream dos = new DataOutputStream(connection.getOutputStream());
             dos.writeBytes(lineEnd + twoHyphens + boundary + lineEnd);
-            dos.writeBytes("Content-Disposition: form-data; name=\"userfile\"; filename=\"" + fileName + "\"" + lineEnd);
+            dos.writeBytes("Content-Disposition: form-data; name=\"" +
+                    attachmentName + "\";filename=\"" +
+                    attachmentFileName + "\"" + lineEnd);
             dos.writeBytes("Content-Type: application/octet-stream" + lineEnd);
             dos.writeBytes(lineEnd);
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, dos);
@@ -132,6 +142,9 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
             dos.flush();
             dos.close();
 
+
+            if (connection.getResponseCode() == 200)
+            {
             inputStream = connection.getInputStream();
             StringBuilder output = new StringBuilder();
             if (inputStream != null) {
@@ -143,10 +156,14 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
                     line = reader.readLine();
                 }
             }
-            JsonResponse = output.toString();
+            response = output.toString();
 
+            } else
+            {
+                Log.e(LOG_TAG, "Error response code: " + connection.getResponseCode());
+            }
         } catch (IOException e) {
-            Log.e(LOG_TAG, "Problem retrieving the bountye JSON results.", e);
+            Log.e(LOG_TAG, "Problem retrieving the upload JSON results.", e);
         } finally {
             if (connection != null) {
                 connection.disconnect();
@@ -155,13 +172,13 @@ public class PostUtils extends AsyncTask<Bitmap, Void, String> {
                 inputStream.close();
             }
         }
-        return JsonResponse;
+        return response;
     }
 
-    public static String extractUploadData() throws JSONException, IOException
+    public static String extractUploadData(String jsonResponse) throws JSONException, IOException
     {
         String result="";
-        JSONObject root = new JSONObject(JsonResponse);
+        JSONObject root = new JSONObject(jsonResponse);
         result = root.getString("originalFileName");
 
         return result;
